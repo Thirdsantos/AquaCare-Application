@@ -51,8 +51,17 @@ def update_db(data):
 
 @socketio.on("sensors")
 def handle_sensors(data):
-    ref.update(data)  
-    print("Successfully updated Firebase")
+    try:
+        print(f"Received data: {data}") 
+        if isinstance(data, dict):  
+            print("Successfully updated Firebase")
+            socketio.emit('sensor_response', 'Data successfully updated')
+        else:
+            print("Error: Data is not in the correct format")
+            socketio.emit('sensor_response', 'Invalid data format')
+    except Exception as e:
+        print(f"Error updating Firebase: {e}")
+        socketio.emit('sensor_response', 'Failed to update data')
 
 if __name__ == "__main__":
     print("WebSocket Server is Running...")

@@ -9,7 +9,7 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 
 
 if not firebase_admin._apps:
-    cred = credentials.Certificate("accountkey.json")
+    cred = credentials.Certificate("key.json")
     firebase_admin.initialize_app(cred, {
         "databaseURL": "https://aquamans-47d16-default-rtdb.asia-southeast1.firebasedatabase.app/"
     })

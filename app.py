@@ -48,19 +48,14 @@ def handle_message(msg):
 @socketio.on("sensors")
 def handle_sensors(data):
     try:
-        print(f"Received data: {data}")  
+        print(f"Received data: {data}")
         
-        if isinstance(data, dict):  
+        if isinstance(data, dict):
             if "PH" in data and "Temperature" in data:
-               
-                current_data = ref.get()
-                if current_data != data:  
-                    ref.set(data)
-                    print("Successfully updated Firebase")
-                    socketio.emit('sensor_response', 'Data successfully updated in Firebase')
-                else:
-                    print("Data is the same as the current value, not updating.")
-                    socketio.emit('sensor_response', 'No changes detected, not updating Firebase')
+                
+                ref.update(data)  
+                print("Successfully updated Firebase")
+                socketio.emit('sensor_response', 'Data successfully updated in Firebase')
             else:
                 print("Error: Missing 'PH' or 'Temperature' data")
                 socketio.emit('sensor_response', 'Invalid data format')

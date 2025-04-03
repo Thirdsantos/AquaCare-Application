@@ -45,19 +45,14 @@ def handle_message(msg):
     print(f"Received message: {msg}")
     socketio.send(f"Server received: {msg}")
 
-def update_db(data):
-    key = data.keys()
-    keyList = list(key)[0]
-    values = data[keyList]
-    return values
-
 @socketio.on("sensors")
 def handle_sensors(data):
     try:
-        print(f"Received data: {data}") 
+        print(f"Received data: {data}")  
         if isinstance(data, dict):  
+            ref.set(data)
             print("Successfully updated Firebase")
-            socketio.emit('sensor_response', 'Data successfully updated')
+            socketio.emit('sensor_response', 'Data successfully updated in Firebase')
         else:
             print("Error: Data is not in the correct format")
             socketio.emit('sensor_response', 'Invalid data format')

@@ -57,13 +57,13 @@ def handle_sensors(data):
         print(f"Received data: {data}")
 
         if isinstance(data, dict):
-            if "PH" in data and "Temperature" in data:
+            if "PH" in data and "Temperature" in data and "Turbidity" in data:
                 
                 ref.update(data)  
                 print("Successfully updated Firebase")
                 socketio.emit('sensor_response', 'Data successfully updated in Firebase')
             else:
-                print("Error: Missing 'PH' or 'Temperature' data")
+                print("Error: Missing 'PH' or 'Temperature' data or 'Turbidity' data")
                 socketio.emit('sensor_response', 'Invalid data format')
         else:
             print("Error: Data is not in the correct format")

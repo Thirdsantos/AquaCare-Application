@@ -36,6 +36,10 @@ else:
 ref = db.reference("Sensors")
 
 
+@app.route("/")
+def index():
+    return "AQUACARE THE BRIDGE BETWEEN THE GAPS"
+
 @socketio.on("connect")
 def connection():
     print("A Client is Connected!")

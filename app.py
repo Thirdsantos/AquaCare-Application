@@ -1,17 +1,19 @@
 import os
 import json
+import eventlet
+import eventlet.wsgi
 from flask import Flask
 from flask_socketio import SocketIO
 import firebase_admin
 from firebase_admin import credentials, db
 from dotenv import load_dotenv
 
+eventlet.monkey_patch()
 
 load_dotenv()
 
 app = Flask(__name__)
-socketio = SocketIO(app, cors_allowed_origins="*")
-
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode="eventlet")
 
 firebase_credentials = os.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON")
 

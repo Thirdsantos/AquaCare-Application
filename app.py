@@ -61,7 +61,7 @@ def handle_sensors(data):
                 
                 ref.update(data)  
                 print("Successfully updated Firebase")
-                socketio.emit('sensor_response', 'Data successfully updated in Firebase')
+                socketio.emit('sensor_response', data)
             else:
                 print("Error: Missing 'PH' or 'Temperature' data or 'Turbidity' data")
                 socketio.emit('sensor_response', 'Invalid data format')

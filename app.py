@@ -50,25 +50,35 @@ def connection():
 def disconnection():
     print("A Client is Disconnected!")
 
+def updateToDb(data):
+    if isinstance(data, dict):
+        if "PH" in data and "Temperature" in data and "Turbidity" in data:
+                
+            ref.update(data)  
+            print("Successfully updated Firebase")
+        else:
+                print("Error: Missing 'PH' or 'Temperature' data or 'Turbidity' data")
+                socketio.emit('sensor_response', 'Invalid data format')
+    else:
+        print("Error: Data is not in the correct format")
+        socketio.emit('sensor_response', 'Invalid data format')
+
+
+
+
+refNotif = db.reference("Notifications")
 
 @socketio.on("sensors")
 def handle_sensors(data):
     try:
         print(f"Received data: {data}")
 
-        if isinstance(data, dict):
-            if "PH" in data and "Temperature" in data and "Turbidity" in data:
-                
-                ref.update(data)  
-                print("Successfully updated Firebase")
-                socketio.emit('sensor_response', data)
-            else:
-                print("Error: Missing 'PH' or 'Temperature' data or 'Turbidity' data")
-                socketio.emit('sensor_response', 'Invalid data format')
-        else:
-            print("Error: Data is not in the correct format")
-            socketio.emit('sensor_response', 'Invalid data format')
+        updateToDb(data)
+        
 
+
+
+        
     except Exception as e:
         print(f"Error updating Firebase: {e}")
         socketio.emit('sensor_response', 'Failed to update data')

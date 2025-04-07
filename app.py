@@ -72,15 +72,18 @@ def checkTreshHold(data):
     temperatureValue = data["Temperature"]
     turbidityValue = data["Turbidity"]
 
+    if ph_value["Min"] != 0 and ph_value["Max"] != 0:
+        if ph_value["Min"] > phValue or ph_value["Max"] < phValue:
+            socketio.emit('PHNotif', {"alert": "PH value is out of range!"})
 
-    if ph_value["Min"] > phValue or ph_value["Max"] < phValue:
-        socketio.emit('PHNotif', {"alert": "PH value is out of range!"})
-    
-    if temp_value["Min"] > temperatureValue or temp_value["Max"] < temperatureValue:
-        socketio.emit('TemperatureNotif', {"alert": "Temperature value is out of range!"})
-    
-    if turb_value["Min"] > turbidityValue or turb_value["Max"] < turbidityValue:
-        socketio.emit('TurbidityNotif', {"alert": "Turbidity value is out of range!"})
+    if temp_value["Min"] != 0 and temp_value["Max"] != 0:
+        if temp_value["Min"] > temperatureValue or temp_value["Max"] < temperatureValue:
+            socketio.emit('TemperatureNotif', {"alert": "Temperature value is out of range!"})
+
+    if turb_value["Min"] != 0 and turb_value["Max"] != 0:
+        if turb_value["Min"] > turbidityValue or turb_value["Max"] < turbidityValue:
+            socketio.emit('TurbidityNotif', {"alert": "Turbidity value is out of range!"})
+
         
 
 

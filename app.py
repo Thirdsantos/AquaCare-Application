@@ -10,11 +10,6 @@ import firebase_admin
 from firebase_admin import credentials, db
 from dotenv import load_dotenv
 
-refPh = db.reference("Notification/PH")
-refTemp = db.reference("Notification/Temperature")
-refTurb = db.reference("Notification/Turbidity")
-ref = db.reference("Sensors")
-refNotif = db.reference("Notifications")
 
 
 load_dotenv()
@@ -38,6 +33,12 @@ else:
     print("Error: GOOGLE_APPLICATION_CREDENTIALS_JSON not found in environment variables.")
     exit()
 
+
+refPh = db.reference("Notification/PH")
+refTemp = db.reference("Notification/Temperature")
+refTurb = db.reference("Notification/Turbidity")
+ref = db.reference("Sensors")
+refNotif = db.reference("Notifications")
 
 
 

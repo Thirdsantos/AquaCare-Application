@@ -10,6 +10,12 @@ import firebase_admin
 from firebase_admin import credentials, db
 from dotenv import load_dotenv
 
+refPh = db.reference("Notification/PH")
+refTemp = db.reference("Notification/Temperature")
+refTurb = db.reference("Notification/Turbidity")
+ref = db.reference("Sensors")
+refNotif = db.reference("Notifications")
+
 
 load_dotenv()
 
@@ -33,7 +39,7 @@ else:
     exit()
 
 
-ref = db.reference("Sensors")
+
 
 
 @app.route("/")
@@ -50,18 +56,19 @@ def connection():
 def disconnection():
     print("A Client is Disconnected!")
 
-def updateToDb(data):
-    
-                
-            ref.update(data)  
-            print("Successfully updated Firebase")
+@socketio.on("message")
+def handle_message(message):
+    print(message)
+    socketio.emit("Message", "Hello. Testing if connected kana")
+
+def updateToDb(data):   
+    ref.update(data)  
+    print("Successfully updated Firebase")
        
 
 
 def checkTreshHold(data):
-    refPh = db.reference("Notification/PH")
-    refTemp = db.reference("Notification/Temperature")
-    refTurb = db.reference("Notification/Turbidity")
+    
     
 
     ph_value = refPh.get()
@@ -87,7 +94,7 @@ def checkTreshHold(data):
         
 
 
-refNotif = db.reference("Notifications")
+
 
 @socketio.on("sensors")
 def handle_sensors(data):

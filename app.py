@@ -1,6 +1,3 @@
-import eventlet
-eventlet.monkey_patch()
-
 import os
 import json
 from flask import Flask, request
@@ -16,8 +13,8 @@ load_dotenv()
 
 # Initialize Flask app
 app = Flask(__name__)
-# Initialize SocketIO
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode="eventlet")
+# Use gevent for async_mode (compatible with geventwebsocket)
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode="gevent")
 
 # Firebase Setup
 firebase_credentials = os.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON")
@@ -45,7 +42,7 @@ refNotif = db.reference("Notifications")
 def index():
     return "AQUACARE THE BRIDGE BETWEEN THE GAPS"
 
-# WebSocket route for ESP32
+# Raw WebSocket route for ESP32
 @app.route("/ws")
 def websocket_esp32():
     if request.environ.get("wsgi.websocket"):
@@ -121,9 +118,9 @@ def checkTreshHold(data):
         if turb_value["Min"] > turbidityValue or turb_value["Max"] < turbidityValue:
             socketio.emit('TurbidityNotif', {"alert": "Turbidity value is out of range!"})
 
-# Run WebSocket + SocketIO server
+# Run WebSocket + Socket.IO server
 if __name__ == "__main__":
     print("Starting AquaCare Server with WebSocket (ESP32) + Socket.IO (Flutter)...")
-    # Use pywsgi to serve both WebSocket and HTTP
+    # Use gevent's WSGI server with WebSocketHandler
     server = pywsgi.WSGIServer(('0.0.0.0', 5000), app, handler_class=WebSocketHandler)
     server.serve_forever()
